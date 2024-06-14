@@ -53,3 +53,13 @@ def close_machine(instance_uuid: str = None):
         return True
     return False
 ```
+
+# Build By Dockerfile
+```text
+docker build -t autodl-keeper .
+```
+
+# Run By Docker
+```text
+docker run --env-file .env autodl-keeper
+```
