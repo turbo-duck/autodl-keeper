@@ -20,6 +20,7 @@ logging.basicConfig(
 
 headers = {
     "Authorization": authorization,
+    "Content-Type": "application/json;charset=UTF-8",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
 }
 
@@ -32,9 +33,11 @@ def open_machine(instance_uuid: str = None):
         "instance_uuid": str(instance_uuid),
         "payload": "non_gpu"
     }
+
     response = requests.post(url=url, headers=headers, data=json.dumps(body))
     json_data = response.json()
     logging.info(f"uuid: {instance_uuid}, open")
+    logging.info(f"{instance_uuid} response: {json_data}")
     if json_data['code'] == "Success":
         return True
     return False
@@ -50,6 +53,7 @@ def close_machine(instance_uuid: str = None):
     response = requests.post(url=url, headers=headers, data=json.dumps(body))
     json_data = response.json()
     logging.info(f"uuid: {instance_uuid}, close")
+    logging.info(f"{instance_uuid} response: {json_data}")
     if json_data['code'] == "Success":
         return True
     return False
@@ -91,7 +95,7 @@ def check_instance(page: int = 1):
                 logging.info(f"准备续费: {uuid}")
                 # 续费逻辑
                 open_machine(uuid)
-                time.sleep(5)
+                time.sleep(60)
                 close_machine(uuid)
                 time.sleep(5)
             else:
@@ -112,7 +116,7 @@ def main():
 
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
-    scheduler.add_job(main, 'interval', seconds=60)
+    scheduler.add_job(main, 'interval', hour=1)
     try:
         # 启动调度器
         scheduler.start()
