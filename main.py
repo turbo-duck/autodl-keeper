@@ -116,7 +116,7 @@ def main():
 
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
-    scheduler.add_job(main, 'interval', hour=1)
+    scheduler.add_job(main, 'interval', hours=1)
     try:
         # 启动调度器
         scheduler.start()
