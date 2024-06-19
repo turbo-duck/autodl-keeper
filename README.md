@@ -61,5 +61,5 @@ docker build -t autodl-keeper .
 
 # Run By Docker
 ```text
-docker run --env-file .env autodl-keeper
+docker run -d --env-file .env autodl-keeper
 ```
