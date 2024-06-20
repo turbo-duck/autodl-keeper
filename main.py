@@ -14,9 +14,9 @@ authorization = os.getenv('Authorization')
 min_day = os.getenv('MIN_DAY')
 
 logging.basicConfig(
-    filename='main.log',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 headers = {
     "Authorization": authorization,
@@ -36,8 +36,8 @@ def open_machine(instance_uuid: str = None):
 
     response = requests.post(url=url, headers=headers, data=json.dumps(body))
     json_data = response.json()
-    logging.info(f"uuid: {instance_uuid}, open")
-    logging.info(f"{instance_uuid} response: {json_data}")
+    logger.info(f"uuid: {instance_uuid}, open")
+    logger.info(f"{instance_uuid} response: {json_data}")
     if json_data['code'] == "Success":
         return True
     return False
@@ -52,8 +52,8 @@ def close_machine(instance_uuid: str = None):
     }
     response = requests.post(url=url, headers=headers, data=json.dumps(body))
     json_data = response.json()
-    logging.info(f"uuid: {instance_uuid}, close")
-    logging.info(f"{instance_uuid} response: {json_data}")
+    logger.info(f"uuid: {instance_uuid}, close")
+    logger.info(f"{instance_uuid} response: {json_data}")
     if json_data['code'] == "Success":
         return True
     return False
@@ -87,19 +87,19 @@ def check_instance(page: int = 1):
             current_date = datetime.now(pytz.timezone('Asia/Shanghai'))
             date_difference = current_date - status_at_time
             date_difference_day = date_difference.days
-            logging.info(f"now: {current_date.strftime('%Y-%m-%d %H:%M:%S')}, "
+            logger.info(f"now: {current_date.strftime('%Y-%m-%d %H:%M:%S')}, "
                          f"phone: {phone}, name: {region_name} {machine_alias} {uuid}, "
                          f"status: {status}, date_diff: {date_difference_day}天")
             # 小于1天
             if date_difference_day >= int(min_day):
-                logging.info(f"准备续费: {uuid}")
+                logger.info(f"准备续费: {uuid}")
                 # 续费逻辑
                 open_machine(uuid)
                 time.sleep(60)
                 close_machine(uuid)
                 time.sleep(5)
             else:
-                logging.info(f"等待下次扫描: {uuid}")
+                logger.info(f"等待下次扫描: {uuid}")
                 # 不作操作
                 pass
     else:
@@ -108,9 +108,9 @@ def check_instance(page: int = 1):
 
 def main():
     if not authorization:
-        logging.error("Authorization is None !")
+        logger.error("Authorization is None !")
         exit(-1)
-    logging.info(f"now: {datetime.now(pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info(f"now: {datetime.now(pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S')}")
     check_instance()
 
 
