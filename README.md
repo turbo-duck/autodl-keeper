@@ -13,6 +13,7 @@ cd autodl-keeper
 
 
 ## 新建配置
+.env.template 为模板 你可以直接复制 或者 mv 修改名字
 ```shell
 vim .env
 ```
@@ -67,81 +68,32 @@ tail -f nohup.out
 ![](./images/05.png)
 
 
-========================= 🚧 后续还在施工 ======================
 ## 启动方案2: 容器启动
+你可以选择拉取现有镜像，或者自己打包。
 
-## 拉取镜像
+**注意: 你需要查看 "新建配置" 的内容 需要配置一下 .env**
+
+当前目录应该是这个样子:
+
+
+## 二选一: 拉取镜像
 ```shell
 docker pull 
 ```
+## 二选一: 打包镜像
+```shell
+docker build -t autodl-keeper .
+```
+![](./images/06.png)
+
 
 ## 启动镜像
 ```shell
-docker run -it -d -e 
-
+docker run -d --env-file .env --name autodl-keeper autodl-keeper 
+```
+查看日志
+```shell
+docker logs -f autodl-keeper
 ```
 
-
-# 详细内容
-# env
-```text
-Authorization=
-MIN_DAY=7
-```
-
-# requirements
-```text
-import os
-from dotenv import load_dotenv
-import requests
-import json
-import time
-import logging
-from datetime import datetime
-import pytz
-from apscheduler.schedulers.blocking import BlockingScheduler
-```
-
-# core code
-```python
-def open_machine(instance_uuid: str = None):
-    if not instance_uuid:
-        return False
-    url = "https://www.autodl.com/api/v1/instance/power_on"
-    body = {
-        "instance_uuid": str(instance_uuid),
-        "payload": "non_gpu"
-    }
-    response = requests.post(url=url, headers=headers, data=json.dumps(body))
-    json_data = response.json()
-    logging.info(f"uuid: {instance_uuid}, open")
-    if json_data['code'] == "Success":
-        return True
-    return False
-```
-
-```python
-def close_machine(instance_uuid: str = None):
-    if not instance_uuid:
-        return False
-    url = "https://www.autodl.com/api/v1/instance/power_off"
-    body = {
-        "instance_uuid": str(instance_uuid)
-    }
-    response = requests.post(url=url, headers=headers, data=json.dumps(body))
-    json_data = response.json()
-    logging.info(f"uuid: {instance_uuid}, close")
-    if json_data['code'] == "Success":
-        return True
-    return False
-```
-
-# Build By Dockerfile
-```text
-docker build -t autodl-keeper .
-```
-
-# Run By Docker
-```text
-docker run -d --env-file .env autodl-keeper
-```
+![](./images/07.png)
