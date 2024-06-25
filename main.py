@@ -36,9 +36,10 @@ def open_machine(instance_uuid: str = None):
 
     response = requests.post(url=url, headers=headers, data=json.dumps(body))
     json_data = response.json()
-    logger.info(f"uuid: {instance_uuid}, open")
+    logger.info(f"uuid: {instance_uuid}, open 机器开机")
     logger.info(f"{instance_uuid} response: {json_data}")
     if json_data['code'] == "Success":
+        logger.info(f"uuid: {instance_uuid}, 机器开机成功")
         return True
     return False
 
@@ -53,8 +54,10 @@ def close_machine(instance_uuid: str = None):
     response = requests.post(url=url, headers=headers, data=json.dumps(body))
     json_data = response.json()
     logger.info(f"uuid: {instance_uuid}, close")
+    logger.info(f"uuid: {instance_uuid}, close 机器关机")
     logger.info(f"{instance_uuid} response: {json_data}")
     if json_data['code'] == "Success":
+        logger.info(f"uuid: {instance_uuid}, 机器关机成功")
         return True
     return False
 
@@ -103,7 +106,7 @@ def check_instance(page: int = 1):
                 # 不作操作
                 pass
     else:
-        return
+        logger.error(f"扫描失败: {json_data}")
 
 
 def main():
@@ -115,6 +118,8 @@ def main():
 
 
 if __name__ == "__main__":
+    # 先检查一次 再定时检查
+    main()
     scheduler = BlockingScheduler()
     scheduler.add_job(main, 'interval', hours=1)
     try:

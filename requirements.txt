@@ -1,3 +1,5 @@
-requests
-python-dotenv
-apscheduler
+apscheduler==3.10.4
+datetime
+pytz==2024.1
+python-dotenv==1.0.0
+requests==2.28.2
