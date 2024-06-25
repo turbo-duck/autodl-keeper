@@ -74,12 +74,26 @@ tail -f nohup.out
 **注意: 你需要查看 "新建配置" 的内容 需要配置一下 .env**
 
 当前目录应该是这个样子:
-
+```shell
+.
+├── Dockerfile
+├── .env !注意这里是必须的!
+├── .env.template
+├── .git
+├── .gitignore
+├── LICENSE
+├── main.py
+├── nohup.out
+├── README.md
+└── requirements.txt
+```
 
 ## 二选一: 拉取镜像
 ```shell
-docker pull 
+docker pull wdkang/autodl-keeper:v1.0
 ```
+![](./images/08.png)
+
 ## 二选一: 打包镜像
 ```shell
 docker build -t autodl-keeper .
