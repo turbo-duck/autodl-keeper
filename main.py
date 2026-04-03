@@ -11,8 +11,6 @@ import pytz
 import requests
 from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
-from playwright.sync_api import sync_playwright
 
 
 LOGIN_URL = "https://www.autodl.com/login"
@@ -97,6 +95,15 @@ def run_single_login_attempt(
     timeout_ms: int,
     post_login_wait_seconds: int,
 ) -> str:
+    try:
+        from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+        from playwright.sync_api import sync_playwright
+    except ImportError as exc:
+        raise AuthError(
+            "缺少 playwright 依赖，请先执行 pip install -r requirements.txt "
+            "并运行 playwright install chromium"
+        ) from exc
+
     captured: dict[str, Optional[str]] = {"token": None}
 
     with sync_playwright() as playwright:
