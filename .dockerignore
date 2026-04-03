@@ -1,0 +1,9 @@
+.git
+.github
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+nohup.out

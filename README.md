@@ -159,6 +159,11 @@ tail -f nohup.out
 docker build -t autodl-keeper .
 ```
 
+说明：
+
+- 当前镜像构建会自动安装 Playwright Chromium 及其运行依赖
+- 构建时间会比纯 Python 镜像更长一些，但容器内自动登录会更稳定
+
 ### 启动容器
 
 ```bash
@@ -191,8 +196,12 @@ docker logs -f autodl-keeper
 
 - 当前仓库没有自动化测试
 - 自动登录依赖 Playwright 和 Chromium，环境未准备好时只能使用现成 `Authorization`
-- Dockerfile 只安装了 Python 依赖，没有在镜像构建中执行 `playwright install chromium`
 - 如果容器环境缺少浏览器和系统依赖，Playwright 自动登录流程可能无法使用
+
+## 变更记录
+
+- 详细变更见 [CHANGELOG.md](./CHANGELOG.md)
+- 当前版本发布说明见 [RELEASE_NOTES.md](./RELEASE_NOTES.md)
 
 ## 开发说明
 
