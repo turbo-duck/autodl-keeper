@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Added `.dockerignore` to avoid packaging local secrets, Git metadata, and transient files into Docker build contexts.
 - Added `CHANGELOG.md` and `RELEASE_NOTES.md` to keep repository history and release summaries easier to review.
+- Added a safer Docker image workflow mode where pull requests only validate builds and main-branch runs publish images.
 
 ### Changed
 
@@ -19,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Moved Playwright imports to runtime so `python main.py --help` works even when Playwright is not installed yet.
 - Installed Chromium during Docker image builds so Playwright-based login can work inside containers.
 - Removed the brittle shell-based `.env` export step from Docker startup.
+- Updated the GitHub Actions Docker workflow to current action versions and removed unsupported legacy image targets.
 
 ### Security
 

@@ -9,6 +9,7 @@ This maintenance release focuses on security, container reliability, and reposit
 - Upgraded `requests` and explicitly pinned `urllib3` to address the dependency vulnerabilities reported on the default branch.
 - Upgraded the rest of the runtime dependencies to current releases that match the project structure.
 - Updated the Docker image so Playwright installs Chromium during build, which makes automatic token retrieval usable in containers.
+- Reworked the GitHub Actions Docker workflow so pull requests build-check only, while `main` pushes publish Docker images.
 - Simplified container startup by removing shell-based `.env` parsing and running the app directly.
 - Added repository-level change tracking with `CHANGELOG.md`.
 
