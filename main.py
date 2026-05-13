@@ -104,7 +104,7 @@ def run_single_login_attempt(
             "并运行 playwright install chromium"
         ) from exc
 
-    captured: dict[str, Optional[str]] = {"token": None}
+    captured_token: list[str] = []
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=not headed)
@@ -125,7 +125,7 @@ def run_single_login_attempt(
             data = payload.get("data") or {}
             token = data.get("token")
             if token:
-                captured["token"] = token
+                captured_token.append(token)
 
         page.on("response", handle_response)
 
@@ -151,12 +151,12 @@ def run_single_login_attempt(
             ):
                 login_button.click()
 
-            if captured["token"]:
-                return captured["token"]
+            if captured_token:
+                return captured_token[-1]
 
             page.wait_for_timeout(post_login_wait_seconds * 1000)
-            if captured["token"]:
-                return captured["token"]
+            if captured_token:
+                return captured_token[-1]
 
             raise AuthError("未在 passport 响应中捕获到 token，可能触发了验证码或页面未正常提交")
         except PlaywrightTimeoutError as exc:
